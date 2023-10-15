@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kaz13</title>
+    <script>
+        function validateInput() {
+            var textArea = document.getElementById('input_text');
+            var usernameField = document.getElementById('username');
+            var charCount = textArea.value.length;
+            var wordCount = textArea.value.trim().split(/\s+/).length;
+            var errorDiv = document.getElementById('error_message');
+
+            if (usernameField.value === "") {
+                errorDiv.innerHTML = "Please enter a username.";
+                return false;
+            } else if (wordCount > 10 || charCount > 100) {
+                errorDiv.innerHTML = "You've reached the limit of 10 words or 100 characters.";
+                return false;
+            } else {
+                errorDiv.innerHTML = "";
+            }
+            return true;
+        }
+    
+function updateInput() {
+    var textArea = document.getElementById('input_text');
+    var charCount = textArea.value.length;
+    var wordCount = textArea.value.trim().split(/\s+/).length;
+    var errorDiv = document.getElementById('error_message');
+
+    // Split the text into words
+    var words = textArea.value.split(' ');
+
+    // Check each word and truncate to 10 characters if needed
+    for (var i = 0; i < words.length; i++) {
+        if (words[i].length > 10) {
+            // Display an alert
+            alert("Word truncated to 10 characters: " + words[i].slice(0, 10));
+            // Replace the word with the truncated version
+            words[i] = words[i].slice(0, 10);
+        }
+    }
+
+    // Enforce character limit
+    if (charCount > 100) {
+        errorDiv.innerHTML = "You've reached the limit of 100 characters.";
+        textArea.value = textArea.value.slice(0, 100); // Truncate to 100 characters
+    } else {
+        errorDiv.innerHTML = "";
+    }
+
+    // Truncate words that exceed 10 characters
+    textArea.value = words.join(' ');
+
+    // Check and enforce the 10-word limit
+    var wordsArray = textArea.value.trim().split(/\s+/);
+    if (wordsArray.length > 10) {
+        // Remove extra words
+        wordsArray = wordsArray.slice(0, 10);
+        textArea.value = wordsArray.join(' ');
+        errorDiv.innerHTML = "You've reached the limit of 10 words.";
+    } else {
+        errorDiv.innerHTML = "";
+    }
+
+    // Update the word and character counts
+    var wordCountSpan = document.getElementById('word_count');
+    wordCountSpan.innerHTML = wordsArray.length;
+
+    var charCountSpan = document.getElementById('char_count');
+    charCountSpan.innerHTML = charCount;
+}
+
+    </script>
+</head>
+<body>
+    <h1>Kaz13</h1>
+    <form method="POST" onsubmit="return validateInput();">
+        <label for="username">User:</label>
+        <input type="text" id="username" name="username">
+        <br>
+        <textarea id="input_text" name="input_text" rows="5" cols="40" oninput="updateInput();"></textarea>
+        <br>
+        <p id="error_message"></p>
+        <p>Character Count: <span id="char_count">0</span></p>
+        <p>Word Count: <span id="word_count">0</span></p>
+        <input type="submit" value="Send Text">
+    </form>
+</body>
+</html>

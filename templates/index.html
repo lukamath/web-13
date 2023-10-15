@@ -1,51 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Message Form</title>
+    <title>Kaz13</title>
 </head>
 <body>
-    <h1>Message Form</h1>
-    <form method="post" action="/send">
-        <label for="username">Username:</label>
-        <input type="text" name="username" id="username" required>
-        <br>
-        <label for="text">Message:</label>
-        <textarea name="text" id="text" required rows="5" maxlength="100"></textarea>
-        <div id="wordCount">0 words, 0 characters</div>
-        <input type="submit" value="Send">
-    </form>
+    <div class="container mt-5">
+        <h1>Kaz13</h1>
+        <form method="POST" action="/submit">
+            <div class="form-group">
+                <label for="user">User:</label>
+                <input type="text" id="user" name="user" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message (Max 10 words of 10 characters each):</label>
+                <input type="text" id="message" name="message" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="timestamp">Date and Time:</label>
+                <input type="text" id="timestamp" name="timestamp" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
     <script>
-    const textArea = document.getElementById('text');
-    const wordCount = document.getElementById('wordCount');
-    const maxWords = 10;
+        var messageInput = document.getElementById('message');
+        var currentWordCount = 0;
+        var currentCharCount = 0;
 
-    textArea.addEventListener('input', function () {
-        let words = textArea.value.trim().split(/\s+/);
-        let wordCounter = words.length;
+        messageInput.addEventListener('input', function () {
+            var words = messageInput.value.trim().split(/\s+/);
 
-        if (wordCounter > maxWords) {
-            // If more than 10 words, remove the excess words
-            words = words.slice(0, maxWords);
-            wordCounter = maxWords;
-        }
-
-        wordCount.textContent = `${wordCounter} words`;
-
-        // Check and limit the input for individual words
-        words = words.map(word => {
-            if (word.length > 10) {
-                // If a word exceeds 10 characters, truncate it to 10 characters
-                return word.slice(0, 10);
+            for (var i = 0; i < words.length; i++) {
+                if (words[i].length > 10) {
+                    words[i] = words[i].slice(0, 10);
+                }
             }
-            return word;
+
+            var charCount = words.join('').length;
+            if (words.length > 10) {
+                var extraWords = words.length - 10;
+                words.splice(10, extraWords);
+            }
+
+            if (charCount > 100) {
+                var charDiff = charCount - 100;
+                var lastWord = words.pop();
+                lastWord = lastWord.slice(0, -charDiff);
+                words.push(lastWord);
+            }
+
+            messageInput.value = words.join(' ');
+            currentWordCount = words.length;
+            currentCharCount = charCount;
         });
 
-        textArea.value = words.join(' ');
-    });
-</script>
-
-
-
+        messageInput.addEventListener('keydown', function (event) {
+            var words = messageInput.value.trim().split(/\s+/);
+            if (currentWordCount >= 10 && event.keyCode !== 8) {
+                event.preventDefault(); // Prevent typing more words
+            }
+            if (currentWordCount === 10 && currentCharCount >= 100 && event.keyCode !== 8) {
+                event.preventDefault(); // Prevent typing more characters in the 10th word
+            }
+        });
+    </script>
 </body>
 </html>
