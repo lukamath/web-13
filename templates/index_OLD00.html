@@ -66,7 +66,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            flatpickr("#date_time", {  // Update the ID to match the input field
+            flatpickr("#datetime", {
                 enableTime: true,
                 dateFormat: "Y-m-d H:i",
                 minuteIncrement: 10,
@@ -85,7 +85,7 @@
         <textarea id="input_text" name="input_text" rows="5" cols="40" oninput="updateInput();"></textarea>
         <br>
         <div class="form-group">
-            <label for="date_time">Date and Time:</label>
+            <label for="datetime">Date and Time:</label>
             <input type="text" id="date_time" name="date_time" class="form-control" required>
         </div>
         <p id="error_message"></p>

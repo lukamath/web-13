@@ -10,6 +10,7 @@
             <tr>
                 <th>User</th>
                 <th>Message</th>
+                <th>Slot</th>
                 <th>Timestamp</th>
             </tr>
         </thead>
@@ -18,6 +19,7 @@
             <tr>
                 <td>{{ message.user }}</td>
                 <td>{{ message.message }}</td>
+                <td>{{ message.date_time }}</td>
                 <td>{{ message.timestamp }}</td>
             </tr>
             {% endfor %}
