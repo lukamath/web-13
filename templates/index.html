@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Message Form</title>
+</head>
+<body>
+    <h1>Message Form</h1>
+    <form method="post" action="/send">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" required>
+        <br>
+        <label for="text">Message:</label>
+        <textarea name="text" id="text" required rows="5" maxlength="100"></textarea>
+        <div id="wordCount">0 words, 0 characters</div>
+        <input type="submit" value="Send">
+    </form>
+    <script>
+    const textArea = document.getElementById('text');
+    const wordCount = document.getElementById('wordCount');
+    const maxWords = 10;
+
+    textArea.addEventListener('input', function () {
+        let words = textArea.value.trim().split(/\s+/);
+        let wordCounter = words.length;
+
+        if (wordCounter > maxWords) {
+            // If more than 10 words, remove the excess words
+            words = words.slice(0, maxWords);
+            wordCounter = maxWords;
+        }
+
+        wordCount.textContent = `${wordCounter} words`;
+
+        // Check and limit the input for individual words
+        words = words.map(word => {
+            if (word.length > 10) {
+                // If a word exceeds 10 characters, truncate it to 10 characters
+                return word.slice(0, 10);
+            }
+            return word;
+        });
+
+        textArea.value = words.join(' ');
+    });
+</script>
+
+
+
+</body>
+</html>
