@@ -1,6 +1,6 @@
-from datetime import datetime
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime, timedelta  # Import timedelta
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///message_app0.db'
@@ -28,8 +28,9 @@ def kaz13():
         num_chars = len(message_text)
 
         try:
+            date_time_str = date_time_str + ':00'
             # Parse the date and time string into a datetime object
-            date_time = datetime.strptime(date_time_str, "%Y-%m-%d %H:%M")
+            date_time = datetime.strptime(date_time_str, "%Y-%m-%d %H:%M:%S")
         except ValueError:
             error_message = "Invalid date and time format."
             return render_template('index.html', error_message=error_message)
@@ -61,6 +62,30 @@ def get_all_messages():
 def display_messages():
     messages = Message.query.order_by(Message.timestamp.desc()).all()
     return render_template('messages.html', messages=messages)
+
+@app.route('/w13')
+def w13():
+    return render_template('w13.html')
+
+@app.route('/get_message', methods=['GET'])
+def get_message():
+    current_time = datetime.now()
+    print("Current Time:", current_time)
+    # Query your database for the message where the time slot is within the next 10 minutes
+    # Replace 'your_query' with the appropriate query to find the message
+    message = db.session.query(Message).filter(Message.date_time >= current_time, Message.date_time < current_time + timedelta(minutes=10)).first()
+    if message:
+        message_data = {
+            'user': message.user,
+            'message': message.message
+        }
+        print("Slot Time:", message.date_time)  # You can safely print message.date_time here
+        return jsonify(message_data)
+    else:
+        return jsonify({'message': 'No message available for the next 10 minutes'})
+
+
+
 
 if __name__ == '__main__':
     with app.app_context():
