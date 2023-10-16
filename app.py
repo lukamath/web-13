@@ -63,17 +63,17 @@ def display_messages():
     messages = Message.query.order_by(Message.timestamp.desc()).all()
     return render_template('messages.html', messages=messages)
 
-@app.route('/w13')
+@app.route('/w13')  #to dipaly messages in real time 
 def w13():
     return render_template('w13.html')
 
-@app.route('/get_message', methods=['GET'])
+@app.route('/get_message', methods=['GET']) #   <-- w13.html
 def get_message():
     current_time = datetime.now()
     print("Current Time:", current_time)
     # Query your database for the message where the time slot is within the next 10 minutes
     # Replace 'your_query' with the appropriate query to find the message
-    message = db.session.query(Message).filter(Message.date_time >= current_time, Message.date_time < current_time + timedelta(minutes=10)).first()
+    message = db.session.query(Message).filter(Message.date_time > current_time -timedelta(minutes=10), Message.date_time <= current_time).first()
     if message:
         message_data = {
             'user': message.user,
