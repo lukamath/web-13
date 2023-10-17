@@ -84,9 +84,6 @@ def get_message():
     else:
         return jsonify({'message': 'No message available for the next 10 minutes'})
 
-
-
-
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
