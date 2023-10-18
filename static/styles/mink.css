@@ -1,4 +1,19 @@
 body {
   background-color: black;
-  color: white;
+  color: #ae9268;
+  font-size: 50px;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center; /* Horizontal centering */
+    align-items: center; /* Vertical centering */
+}
+
+.user-container {
+    display: flex;
+    justify-content: left; /* Horizontal centering */
+    align-items: center; /* Vertical centering */
+    font-style: italic;
+    font-size: 17px;
 }

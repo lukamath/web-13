@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Kaz13</title>
+    <title>Word 13</title>
     <!-- Include flatpickr CSS and JavaScript -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mink.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
     <script>
         function validateInput() {
             var textArea = document.getElementById('input_text');
@@ -78,7 +78,10 @@
     </script>
 </head>
 <body>
-    <h1>Kaz13</h1>
+    <h1>Word 13</h1>
+    <div calss="description-container">
+        <p>write maximum of 13 words of 13 chars</p>
+    </div>
     <form method="POST" onsubmit="return validateInput();">
         <label for="username">User:</label>
         <input type="text" id="username" name="username">
