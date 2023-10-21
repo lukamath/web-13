@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Countdown Page</title>
+    <title>Word13 Countdown</title>
 </head>
 <body>
-    <h1>Countdown Timer</h1>
+    <h1>Word13 Countdown to the future</h1>
     <p id="countdown"></p>
+    <audio id="countdownAudio" controls style="display:none">
+      <source src="{{ url_for('static', filename='audio/windfast.mp3') }}" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
     <script>
         var startDateTime = new Date({{ start_time * 1000 }});  // Convert UNIX timestamp to milliseconds
 
@@ -15,11 +19,12 @@
 
             if (distance < 0) {
                 clearInterval(x);
-                document.getElementById("countdown").innerHTML = "Time's up!";
-                // Add a redirect to w13.html here
+                document.getElementById("countdownAudio").play(); // Play the audio
+                document.getElementById("countdown").innerHTML = "Time's up!";              
+                // Redirect to w13.html after a delay (e.g., 1.5 seconds)
                 setTimeout(function() {
                     window.location.replace("{{ url_for('w13') }}");
-                }, 3000); // Redirect after 3 seconds (adjust as needed)
+                }, 1500); // Redirect after 1.5 seconds (adjust as needed)
             } else {
                 var years = Math.floor(distance / (1000 * 60 * 60 * 24 * 365));
                 var months = Math.floor((distance % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30));
