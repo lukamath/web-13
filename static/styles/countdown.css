@@ -1,0 +1,32 @@
+body {
+  background-color: black;
+  /*color: #ae9268;*/
+  color: #fbbc3a;
+  font-size: 50px;
+}
+
+/* Add your custom styling for the countdown here */
+.countdown-container {
+    text-align: center;
+}
+
+.countdown-clock {
+    display: flex;
+    justify-content: center;
+}
+
+.clock-segment {
+    margin: 0 10px;
+    font-size: 36px;
+    background: #000;
+    color: #fbbc3a;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.segment-label {
+    font-size: 14px;
+    color: grey;
+    margin-top: 5px;
+}

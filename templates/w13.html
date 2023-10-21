@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Word 13</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mink.css') }}">
+</head>
+<body>    
+    <div class="logo-container">
+        <a href="{{ url_for('kaz13') }}">
+            <img src="{{ url_for('static', filename='img/w13_k31.png') }}" alt="word 13">
+        </a>
+    </div>
+    <div id="message-container">
+        <p id="message-text"></p>
+        
+    </div>
+    <div class="user-container">
+        <span id="user-name"></span>
+    </div>
+
+    <script>
+        function updateMessage() {
+            fetch('/get_message')
+                .then(response => response.json())
+                .then(data => {
+                    const messageContainer = document.getElementById('message-container');
+                    const messageText = document.getElementById('message-text');
+                    const userName = document.getElementById('user-name');
+                    if (data.message) {
+                        messageText.textContent = data.message;
+                        userName.textContent = data.user;
+                        messageContainer.style.display = 'block';
+                    } else {
+                        messageContainer.style.display = 'none';
+                    }
+                });
+        }
+
+        // Update the message every 15 sec
+        setInterval(updateMessage, 15000);
+
+        // Initial update
+        updateMessage();
+    </script>
+
+</body>
+</html>
