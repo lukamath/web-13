@@ -16,6 +16,10 @@
             if (distance < 0) {
                 clearInterval(x);
                 document.getElementById("countdown").innerHTML = "Time's up!";
+                // Add a redirect to w13.html here
+                setTimeout(function() {
+                    window.location.replace("{{ url_for('w13') }}");
+                }, 3000); // Redirect after 3 seconds (adjust as needed)
             } else {
                 var years = Math.floor(distance / (1000 * 60 * 60 * 24 * 365));
                 var months = Math.floor((distance % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30));
@@ -28,6 +32,5 @@
             }
         }, 1000);
     </script>
-
 </body>
 </html>

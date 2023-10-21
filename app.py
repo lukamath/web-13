@@ -89,7 +89,14 @@ def get_message():
 
 @app.route('/countdown/<int:start_time>')
 def countdown(start_time):
-    #start_time = int(date_time.timestamp())
+    # Calculate the remaining time
+    current_time = int(datetime.now().timestamp())
+    remaining_time = start_time - current_time
+
+    # Check if the countdown has expired
+    if remaining_time <= 0:
+        return redirect(url_for('w13'))
+
     return render_template('countdown.html', start_time=start_time)
 
 
