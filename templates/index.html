@@ -5,11 +5,8 @@
     <!-- Include flatpickr CSS and JavaScript -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
-
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/dogebutton.min.css') }}">
-
-
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/dogebutton.min.css') }}">
     <script>
         function validateInput() {
             var textArea = document.getElementById('input_text');
@@ -71,20 +68,25 @@
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            flatpickr("#date_time", {  // Update the ID to match the input field
+            var takenSlots = {{ taken_slots|tojson|safe }}; // Load taken slots from Flask into JavaScript variable
+            flatpickr("#date_time", {  
                 enableTime: true,
                 dateFormat: "Y-m-d H:i",
                 minuteIncrement: 10,
                 minDate: "today",
                 defaultDate: "today",
+                // Disable the slots that are already taken
+                disable: takenSlots.map(function(slot) {
+                    return new Date(slot * 1000); // Convert Unix timestamp to JavaScript Date object
+                })
             });
         });
     </script>
 </head>
 <body>
     <h1><img src="{{ url_for('static', filename='img/w13_mainlogo.png') }}" alt="word 13"></h1>
-    <div calss="description-container">
-        <p>write maximum of 13 words of 13 chars</p>
+    <div class="description-container">
+        <p>Write a maximum of 13 words of 13 characters.</p>
     </div>
     <form method="POST" onsubmit="return validateInput();">
         <label for="username">User:</label>
@@ -101,9 +103,8 @@
         <p>Word Count: <span id="word_count">0</span></p>
         <input type="submit" value="Send Text">
     </form>
-<br><br><br>
-<div data-xdgbtn-address="D6U7eTceRUace37ySXfAMgHtehMMNmiC7t" class="xdgbtn-donate xdgbtn-theme-corpo xdgbtn-black"></div>
-<script type="text/javascript" src="static/js/dogebutton.min.js"></script>
-
+    <br><br><br>
+    <div data-xdgbtn-address="D6U7eTceRUace37ySXfAMgHtehMMNmiC7t" class="xdgbtn-donate xdgbtn-theme-corpo xdgbtn-black"></div>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/dogebutton.min.js') }}"></script>
 </body>
 </html>
