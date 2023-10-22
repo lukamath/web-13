@@ -67,20 +67,23 @@
             charCountSpan.innerHTML = charCount;
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            var takenSlots = {{ taken_slots|tojson|safe }}; // Load taken slots from Flask into JavaScript variable
-            flatpickr("#date_time", {  
-                enableTime: true,
-                dateFormat: "Y-m-d H:i",
-                minuteIncrement: 10,
-                minDate: "today",
-                defaultDate: "today",
-                // Disable the slots that are already taken
-                disable: takenSlots.map(function(slot) {
-                    return new Date(slot * 1000); // Convert Unix timestamp to JavaScript Date object
-                })
-            });
+    document.addEventListener('DOMContentLoaded', function () {
+        flatpickr("#date_time", {  // Update the ID to match the input field
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            minuteIncrement: 10,
+            minDate: "today",
+            defaultDate: "today",
+            disable: [
+                function(date) {
+                    // Convert the date to a Unix timestamp for comparison
+                    var timestamp = date.getTime() / 1000;
+                    return {% for slot in busy_slots %}timestamp === {{ slot.unixtime }}{% if not loop.last %} || {% endif %}{% endfor %};
+                }
+            ]
         });
+    });
+        
     </script>
 </head>
 <body>

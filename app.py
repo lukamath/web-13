@@ -22,42 +22,48 @@ class Slot(db.Model):
 
 @app.route('/', methods=['GET', 'POST'])
 def kaz13():
-    error_message = None
+	error_message = None
+    # Query the database for busy slots
+	busy_slots = []
+	
+	if request.method == 'POST':
+		username = request.form.get('username')
+		message_text = request.form.get('input_text')
+		date_time_str = request.form.get('date_time')
+		words = message_text.split()
+		num_words = len(words)
+		num_chars = len(message_text)
 
-    if request.method == 'POST':
-        username = request.form.get('username')
-        message_text = request.form.get('input_text')
-        date_time_str = request.form.get('date_time')
+		try:
+			date_time_str = date_time_str + ':00'
+			date_time = datetime.strptime(date_time_str, "%Y-%m-%d %H:%M:%S")
+		except ValueError:
+			error_message = "Invalid date and time format."
+			return render_template('index.html', error_message=error_message, busy_slots=busy_slots)
 
-        words = message_text.split()
-        num_words = len(words)
-        num_chars = len(message_text)
+		if num_words > 10 or num_chars > 100:
+			error_message = "You've reached the limit of 10 words or 100 characters."
+		else:
+			# Check if a slot with the same unixtime already exists
+			existing_slot = Slot.query.filter_by(unixtime=start_time).first()
+			if existing_slot:
+				error_message = "The selected time slot is already taken."
+			else:
+				new_message = Message(user=username, message=message_text, num_words=num_words, num_chars=num_chars, date_time=date_time)
+				db.session.add(new_message)
+				db.session.commit()
 
-        try:
-            date_time_str = date_time_str + ':00'
-            date_time = datetime.strptime(date_time_str, "%Y-%m-%d %H:%M:%S")
-        except ValueError:
-            error_message = "Invalid date and time format."
-            return render_template('index.html', error_message=error_message)
+				# Create a new slot for the selected time
+				new_slot = Slot(unixtime=start_time, message_id=new_message.id)
+				db.session.add(new_slot)
+				db.session.commit()
 
-        if num_words > 10 or num_chars > 100:
-            error_message = "You've reached the limit of 10 words or 100 characters."
-        elif Slot.query.filter_by(unixtime=int(date_time.timestamp())).first():
-            error_message = "The selected time slot is already taken."
-        else:
-            new_message = Message(user=username, message=message_text, num_words=num_words, num_chars=num_chars, date_time=date_time)
-            start_time = int(date_time.timestamp())
-            db.session.add(new_message)
-            db.session.commit()
+				return redirect(url_for('countdown', start_time=start_time))
+		
+		# Get the busy slots from the database
+		busy_slots = Slot.query.all()
 
-            new_slot = Slot(unixtime=start_time, message_id=new_message.id)
-            db.session.add(new_slot)
-            db.session.commit()
-
-            return redirect(url_for('countdown', start_time=start_time))
-
-    taken_slots = [slot.unixtime for slot in Slot.query.all()]
-    return render_template('index.html', error_message=error_message, taken_slots=taken_slots)
+		return render_template('index.html', error_message=error_message, busy_slots=busy_slots)
 
 @app.route('/api/messages/<username>', methods=['GET'])
 def get_messages(username):
