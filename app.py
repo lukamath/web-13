@@ -34,6 +34,8 @@ def kaz13():
 		num_words = len(words)
 		num_chars = len(message_text)
 
+		start_time = None  # Define start_time here
+
 		try:
 			date_time_str = date_time_str + ':00'
 			date_time = datetime.strptime(date_time_str, "%Y-%m-%d %H:%M:%S")
@@ -53,6 +55,8 @@ def kaz13():
 				db.session.add(new_message)
 				db.session.commit()
 
+				start_time = date_time.timestamp()  # Define start_time here
+
 				# Create a new slot for the selected time
 				new_slot = Slot(unixtime=start_time, message_id=new_message.id)
 				db.session.add(new_slot)
@@ -60,10 +64,10 @@ def kaz13():
 
 				return redirect(url_for('countdown', start_time=start_time))
 		
-		# Get the busy slots from the database
-		busy_slots = Slot.query.all()
+	# Get the busy slots from the database
+	busy_slots = Slot.query.all()
 
-		return render_template('index.html', error_message=error_message, busy_slots=busy_slots)
+	return render_template('index.html', error_message=error_message, busy_slots=busy_slots)
 
 @app.route('/api/messages/<username>', methods=['GET'])
 def get_messages(username):
