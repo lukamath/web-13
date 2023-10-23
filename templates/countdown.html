@@ -2,14 +2,43 @@
 <html>
 <head>
     <title>Word13 Countdown</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mink.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/countdown.css') }}">
 </head>
 <body>
-    <h1>Word13 Countdown to the future</h1>
-    <p id="countdown"></p>
+    <div class="countdown-container">
+        <div class="countdown-clock">
+            <div class="clock-segment">
+                <span id="years">00</span>
+                <span class="segment-label">Years</span>
+            </div>
+            <div class="clock-segment">
+                <span id="months">00</span>
+                <span class="segment-label">Months</span>
+            </div>
+            <div class="clock-segment">
+                <span id="days">00</span>
+                <span class="segment-label">Days</span>
+            </div>
+            <div class="clock-segment">
+                <span id="hours">00</span>
+                <span class="segment-label">Hours</span>
+            </div>
+            <div class="clock-segment">
+                <span id="minutes">00</span>
+                <span class="segment-label">Minutes</span>
+            </div>
+            <div class="clock-segment">
+                <span id="seconds">00</span>
+                <span class="segment-label">Seconds</span>
+            </div>
+        </div>
+    </div>
+    <div id="countdown"></div>
     <audio id="countdownAudio" controls style="display:none">
       <source src="{{ url_for('static', filename='audio/windfast.mp3') }}" type="audio/mpeg">
-      Your browser does not support the audio element.
     </audio>
+
     <script>
         var startDateTime = new Date({{ start_time * 1000 }});  // Convert UNIX timestamp to milliseconds
 
@@ -33,9 +62,14 @@
                 var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                document.getElementById("countdown").innerHTML = years + "y " + months + "mo " + days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+                document.getElementById("years").textContent = years.toString().padStart(2, '0');
+                document.getElementById("months").textContent = months.toString().padStart(2, '0');
+                document.getElementById("days").textContent = days.toString().padStart(2, '0');
+                document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+                document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+                document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
             }
         }, 1000);
     </script>
 </body>
-</html>
+</html> 
