@@ -38,6 +38,11 @@
     <audio id="countdownAudio" controls style="display:none">
       <source src="{{ url_for('static', filename='audio/windfast.mp3') }}" type="audio/mpeg">
     </audio>
+    <div class="logo-container">
+        <a href="{{ url_for('kaz13') }}">
+            <img src="{{ url_for('static', filename='img/w13_k31.png') }}" alt="word 13">
+        </a>
+    </div>
 
     <script>
         var startDateTime = new Date({{ start_time * 1000 }});  // Convert UNIX timestamp to milliseconds
