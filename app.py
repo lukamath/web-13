@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta  # Import timedelta
 from profanity_check import predict, predict_prob
+from profanity_multilang import is_profane
 
 
 app = Flask(__name__)
@@ -40,8 +41,11 @@ def kaz13():
         if num_words > 10 or num_chars > 109:
             error_message = "You've reached the limit of 10 words or 100 characters."
         elif predict([message_text])[0]==1:
-                print("Profanity detected in the text! Be Polite")
-                error_message = "Do not write so please! Be Polite"
+            print("Profanity detected in the text! Be Polite")
+            error_message = "Do not write so please! Be Polite"
+        elif is_profane(message_text):
+            print("Parolaccia Italiana! Sii educato")
+            error_message = "Parolaccia Italiana! Sii educato"
         else:
             print("Profanity test passed")
             new_message = Message(user=username, message=message_text, num_words=num_words, num_chars=num_chars, date_time=date_time)
