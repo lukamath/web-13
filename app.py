@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta  # Import timedelta
+from profanity_check import predict, predict_prob
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///message_app0.db'
@@ -35,14 +37,20 @@ def kaz13():
             error_message = "Invalid date and time format."
             return render_template('index.html', error_message=error_message)
 
-        if num_words > 10 or num_chars > 100:
+        if num_words > 10 or num_chars > 109:
             error_message = "You've reached the limit of 10 words or 100 characters."
+        elif predict([message_text])[0]==1:
+                print("Profanity detected in the text! Be Polite")
+                error_message = "Do not write so please! Be Polite"
         else:
+            print("Profanity test passed")
             new_message = Message(user=username, message=message_text, num_words=num_words, num_chars=num_chars, date_time=date_time)
             start_time = int(date_time.timestamp())  
             db.session.add(new_message)
             db.session.commit()
             #return render_template('countdown.html', start_time=start_time)  #this do not show the parameter, maybe to consider for something
+            
+
             return redirect(url_for('countdown', start_time=start_time))
 
     return render_template('index.html', error_message=error_message)
