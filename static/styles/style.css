@@ -9,6 +9,14 @@ body {
 
 }
 
+.bottom-box {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
 
 html {
   height: 100%;
@@ -20,7 +28,7 @@ body {
   background: linear-gradient(#141e30, #243b55);
 }
 
-.login-box {
+.message-box {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -33,18 +41,18 @@ body {
   border-radius: 10px;
 }
 
-.login-box h2 {
+.message-box h2 {
   margin: 0 0 30px;
   padding: 0;
   color: #fbbc3a;
   text-align: center;
 }
 
-.login-box .user-box {
+.message-box .user-box {
   position: relative;
 }
 
-.login-box .user-box input {
+.message-box .user-box input {
   width: 100%;
   padding: 10px 0;
   font-size: 16px;
@@ -55,7 +63,7 @@ body {
   outline: none;
   background: transparent;
 }
-.login-box .user-box label {
+.message-box .user-box label {
   position: absolute;
   top:0;
   left: 0;
@@ -66,7 +74,7 @@ body {
   transition: .5s;
 }
 
-.login-box .txt-box label {
+.message-box .txt-box label {
   position: absolute;
   top:0;
   left: 0;
@@ -77,8 +85,8 @@ body {
   transition: .5s;
 }
 
-.login-box .user-box input:focus ~ label,
-.login-box .user-box input:valid ~ label {
+.message-box .user-box input:focus ~ label,
+.message-box .user-box input:valid ~ label {
   top: -20px;
   left: 0;
   color: #fbbc3a;
@@ -98,14 +106,14 @@ textarea{
   background: transparent;
 }
 
-.login-box .txt-box input:focus ~ label,
-.login-box .txt-box input:valid ~ label {
+.message-box .txt-box input:focus ~ label,
+.message-box .txt-box input:valid ~ label {
   top: -20px;
   left: 0;
   color: #fbbc3a;
   font-size: 12px;
 }
-.login-box form a {
+.message-box form a {
   position: relative;
   display: inline-block;
   padding: 10px 20px;
@@ -119,7 +127,7 @@ textarea{
   letter-spacing: 4px
 }
 
-.login-box a:hover {
+.message-box a:hover {
   background: #000000;
   color: #fff;
   border-radius: 5px;
@@ -129,12 +137,12 @@ textarea{
               0 0 100px #fbbc3a;
 }
 
-.login-box a span {
+.message-box a span {
   position: absolute;
   display: block;
 }
 
-.login-box a span:nth-child(1) {
+.message-box a span:nth-child(1) {
   top: 0;
   left: -100%;
   width: 100%;
@@ -152,7 +160,7 @@ textarea{
   }
 }
 
-.login-box a span:nth-child(2) {
+.message-box a span:nth-child(2) {
   top: -100%;
   right: 0;
   width: 2px;
@@ -171,7 +179,7 @@ textarea{
   }
 }
 
-.login-box a span:nth-child(3) {
+.message-box a span:nth-child(3) {
   bottom: 0;
   right: -100%;
   width: 100%;
@@ -190,7 +198,7 @@ textarea{
   }
 }
 
-.login-box a span:nth-child(4) {
+.message-box a span:nth-child(4) {
   bottom: -100%;
   left: 0;
   width: 2px;
