@@ -5,10 +5,6 @@ body {
   font-size: 15px;
 }
 
-.description-container{
-
-}
-
 .bottom-box {
     position: absolute;
     bottom: 0;
@@ -56,31 +52,21 @@ body {
   width: 100%;
   padding: 10px 0;
   font-size: 16px;
-  color: #fff;
+  color: #fbbc3a;
   margin-bottom: 30px;
   border: none;
   border-bottom: 1px solid #fff;
   outline: none;
   background: transparent;
 }
+
 .message-box .user-box label {
   position: absolute;
   top:0;
   left: 0;
   padding: 10px 0;
   font-size: 16px;
-  color: #fff;
-  pointer-events: none;
-  transition: .5s;
-}
-
-.message-box .txt-box label {
-  position: absolute;
-  top:0;
-  left: 0;
-  padding: 10px 0;
-  font-size: 16px;
-  color: #fff;
+  color: #fbbc3a;
   pointer-events: none;
   transition: .5s;
 }
@@ -90,7 +76,18 @@ body {
   top: -20px;
   left: 0;
   color: #fbbc3a;
-  font-size: 12px;
+  font-size: 9px;
+}
+
+.message-box .txt-box label {
+  position: absolute;
+  top:0;
+  left: 0;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fbbc3a;
+  pointer-events: none;
+  transition: .5s;
 }
 
 textarea{
@@ -106,13 +103,6 @@ textarea{
   background: transparent;
 }
 
-.message-box .txt-box input:focus ~ label,
-.message-box .txt-box input:valid ~ label {
-  top: -20px;
-  left: 0;
-  color: #fbbc3a;
-  font-size: 12px;
-}
 .message-box form a {
   position: relative;
   display: inline-block;

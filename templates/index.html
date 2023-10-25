@@ -78,18 +78,19 @@
                 minDate: "today",
                 defaultDate: "today",
             });
+            var usernameField = document.getElementById('username');
+            usernameField.blur();
         });
     </script>
 </head>
 <body>
     <div class="message-box">
     <h1><img src="{{ url_for('static', filename='img/w13_mainlogo.png') }}" alt="word 13"></h1>
-    <div calss="description-container">
-        <p>max 13 words of max 13 chars</p>
-    </div>
     <form method="POST" onsubmit="return validateInput();">
-        <label for="username">User:</label>
-        <input type="text" id="username" name="username">
+        <div class="user-box">
+                <input type="text" id="username" name="username">
+                <label>User</label>
+        </div>
         <br>
         <textarea id="input_text" name="input_text" rows="5" cols="40" oninput="updateInput();"></textarea>
         <br>
@@ -102,7 +103,7 @@
         <p>Word Count: <span id="word_count">0</span></p>
         <input type="submit" value="Send Text">
     </form>
-<br><br><br>
+    <br><br><br>
     <span></span>
     <span></span>
     <span></span>
