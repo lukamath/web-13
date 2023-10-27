@@ -55,7 +55,7 @@ html {
   color: #fbbc3a;
   margin-bottom: 30px;
   border: none;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid #fbbc3a;
   outline: none;
   background: transparent;
 }
@@ -87,7 +87,7 @@ textarea{
   color: #fbbc3a;
   margin-bottom: 30px;
   border: none;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid #fbbc3a;
   outline: none;
   background-color: transparent;
   background: transparent;
@@ -95,7 +95,15 @@ textarea{
 
 .counter-box p {
   display: inline-block;
-  margin-right: 20px;
+  margin-right: 13px;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.counter-box p span{
+  margin-right: 13px;
+  font-style: normal;
+  font-size: 13px;
 }
 
 .message-box form a {
@@ -103,23 +111,34 @@ textarea{
   display: inline-block;
   padding: 10px 20px;
   color: #fbbc3a;
-  font-size: 16px;
+  font-size: 13px;
   text-decoration: none;
   text-transform: uppercase;
   overflow: hidden;
   transition: .5s;
-  margin-top: 40px;
-  letter-spacing: 4px
+  margin-top: 13px;
+  letter-spacing: 5px
+}
+
+#send-button {
+    display: none;
+}
+
+.btn-send{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .message-box a:hover {
   background: #000000;
-  color: #fff;
+  color: #fbbc3a;
   border-radius: 5px;
-  box-shadow: 0 0 5px #fbbc3a,
-              0 0 25px #fbbc3a,
-              0 0 50px #fbbc3a,
-              0 0 100px #fbbc3a;
+  box-shadow: 0 0 3px #fbbc3a,
+              0 0 13px #fbbc3a,
+              0 0 20px #fbbc3a,
+              0 0 26px #fbbc3a;
 }
 
 .message-box a span {

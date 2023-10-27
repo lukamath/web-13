@@ -19,9 +19,11 @@
             var errorDiv = document.getElementById('error_message');
 
             if (usernameField.value === "") {
+                errorDiv.style.display = 'block'; // Show the error message
                 errorDiv.innerHTML = "Please enter a username.";
                 return false;
-            } else if (wordCount > 10 || charCount > 100) {
+            } else if (wordCount > 10 || charCount > 109) {
+                errorDiv.style.display = 'block'; // Show the error message
                 errorDiv.innerHTML = "You've reached the limit of 10 words or 100 characters.";
                 return false;
             } else {
@@ -46,6 +48,7 @@
             }
 
             if (charCount > 100) {
+                errorDiv.style.display = 'block'; // Show the error message
                 errorDiv.innerHTML = "You've reached the limit of 100 characters.";
                 textArea.value = textArea.value.slice(0, 100);
             } else {
@@ -58,6 +61,7 @@
             if (wordsArray.length > 10) {
                 wordsArray = wordsArray.slice(0, 10);
                 textArea.value = wordsArray.join(' ');
+                errorDiv.style.display = 'block'; // Show the error message
                 errorDiv.innerHTML = "You've reached the limit of 10 words.";
             } else {
                 errorDiv.innerHTML = "";
@@ -80,7 +84,19 @@
             });
             var usernameField = document.getElementById('username');
             usernameField.blur();
+            var errorDiv = document.getElementById('error_message');
+            errorDiv.style.display = 'none'; // Hide the error message initially
         });
+
+
+        function sendButtonClick() {
+        var sendButton = document.getElementById('send-button');
+        sendButton.click();
+        return false; // Prevent the default action of the <a> tag
+    }
+
+
+
     </script>
 </head>
 <body>
@@ -97,21 +113,22 @@
             <div class="form-group">
                 <label for="date_time">Date and Time:</label>
                 <input type="text" id="date_time" name="date_time" class="form-control" required>
+                <input type="submit" class="send-button" id="send-button" value="Send">
             </div>
             <div class="counter-box">
                 <p>Character Count: <span id="char_count">0</span></p>
                 <p>Word Count: <span id="word_count">0</span></p>
-            </div>
-            <br>
-            <input type="submit" value="Send Text">
+            </div>       
+            <div class="btn-send">   
+                <a href="#" onclick="return sendButtonClick();">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    Send
+                </a>
             <p id="error_message" class="error-message">{{ error_message }}</p>
-            
-        </form>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        
+         </form>
     </div>
     <div class="bottom-box">
             <div data-xdgbtn-address="D6U7eTceRUace37ySXfAMgHtehMMNmiC7t" class="xdgbtn-donate xdgbtn-theme-corpo xdgbtn-black"></div>
