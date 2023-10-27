@@ -27,7 +27,7 @@ html {
   position: absolute;
   top: 50%;
   left: 50%;
-  height: 100%;
+  height: 99%;
   width: 400px;
   padding: 40px;
   transform: translate(-50%, -50%);
@@ -46,12 +46,12 @@ html {
 
 .message-box .user-box {
   position: relative;
+  font-size: 16px;
 }
 
 .message-box .user-box input {
   width: 100%;
   padding: 10px 0;
-  font-size: 16px;
   color: #fbbc3a;
   margin-bottom: 30px;
   border: none;
@@ -219,4 +219,87 @@ textarea{
   50%,100% {
     bottom: 100%;
   }
+}
+
+
+/*-----------------------------*/
+
+
+.form-group {
+    display: inline-block;
+}
+
+.form-group label {
+    color: #fbbc3a;
+    font-size: 13px;
+    font-style:   italic;
+}
+
+.form-control {
+    color: #fbbc3a;
+    margin-bottom: 13px;
+    margin-left: 13px;
+    border: none;
+    border-bottom: 1px solid #fbbc3a;
+    outline: none;
+    background: transparent;
+}
+
+.send-button {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #fbbc3a;
+    font-size: 13px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: 0.5s;
+    margin-top: 13px;
+    letter-spacing: 5px;
+}
+
+.send-button:hover {
+    background: #000000;
+    color: #fbbc3a;
+    border-radius: 5px;
+    box-shadow: 0 0 3px #fbbc3a, 0 0 13px #fbbc3a, 0 0 20px #fbbc3a, 0 0 26px #fbbc3a;
+}
+
+
+/* Target the Flatpickr input field */
+.flatpickr-input {
+    background-color: black;
+    color: #fbbc3a !important ;
+    /* Add any other desired styles */
+}
+
+/* Target the Flatpickr calendar popup */
+.flatpickr-calendar {
+    background-color: black;
+}
+
+/* Target the selected date */
+.flatpickr-day.selected {
+    background-color: #fbbc3a;
+    color: black;
+}
+
+.flatpickr-months{
+  background-color: #333333;
+    color: #fbbc3a;
+}
+
+.flatpickr-monthDropdown-months{
+color: #fbbc3a  !important;
+}
+
+.flatpickr-day{
+  color: #fbbc3a;
+}
+
+.numInput{
+  color: #fbbc3a  !important;
+}
+
+.flatpickr-am-pm{
+  color: #fbbc3a  !important;
 }
