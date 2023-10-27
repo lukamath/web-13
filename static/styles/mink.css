@@ -18,3 +18,9 @@ body {
     font-style: italic;
     font-size: 17px;
 }
+
+.message-container p{
+    justify-content: center; /* Horizontal centering */
+    align-content  : center; /* Vertical centering */
+    text-align:     center  ;
+}
