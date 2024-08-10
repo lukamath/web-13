@@ -18,6 +18,13 @@ class Message(db.Model):
     num_chars = db.Column(db.Integer)
     date_time = db.Column(db.DateTime)  # Change the column type to DateTime
 
+@app.route('/api/occupied_slots', methods=['GET'])
+def get_occupied_slots():
+    now = datetime.now()
+    occupied_slots = db.session.query(Message.date_time).filter(Message.date_time >= now).all()
+    occupied_slots = [slot.date_time.strftime('%Y-%m-%d %H:%M:%S') for slot in occupied_slots]
+    return jsonify(occupied_slots)
+
 @app.route('/', methods=['GET', 'POST'])
 def kaz13():
     error_message = None

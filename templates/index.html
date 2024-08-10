@@ -76,13 +76,78 @@
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            flatpickr("#date_time", {  // Update the ID to match the input field
-                enableTime: true,
-                dateFormat: "Y-m-d H:i",
-                minuteIncrement: 10,
-                minDate: "today",
-                defaultDate: "today",
-            });
+
+            // Fetch occupied slots from the server
+            fetch('/api/occupied_slots')
+                .then(response => response.json())
+                .then(occupiedSlots => {
+
+
+                     // Convert occupied slots to a format suitable for disabling
+                    const disabledTimes = occupiedSlots.reduce((acc, slot) => {
+                        const [date, time] = slot.split(' ');
+                        const [hours, minutes] = time.split(':');
+                        if (!acc[date]) acc[date] = [];
+                        acc[date].push({ hours: parseInt(hours, 10), minutes: parseInt(minutes, 10) });
+                        return acc;
+                    }, {});
+
+
+                    flatpickr("#date_time", {  // Update the ID to match the input field
+                        enableTime: true,
+                        dateFormat: "Y-m-d H:i",
+                        minuteIncrement: 10,
+                        minDate: "today",
+                        defaultDate: "today",
+
+                        // Initial disable function to handle disabled times
+                        enable: [
+                            function(date) {
+                                const dateStr = flatpickr.formatDate(date, "Y-m-d");
+                                // Allow selection of all dates initially
+                                return true;
+                            }
+                        ],
+                        // Function to disable specific time slots
+                        disable: [
+                            function(date) {
+                                const dateStr = flatpickr.formatDate(date, "Y-m-d");
+                                const hour = date.getHours();
+                                const minute = date.getMinutes();
+
+                                // Check if the date has any disabled times
+                                if (disabledTimes[dateStr]) {
+                                    return disabledTimes[dateStr].some(slot =>
+                                        slot.hours === hour && slot.minutes === minute
+                                    );
+                                }
+                                return false;
+                            }
+                        ],
+
+                        onChange: function(selectedDates, dateStr, instance) {
+                            // Update disable function when the date changes
+                            instance.set('disable', [
+                                function(date) {
+                                    const dateStr = flatpickr.formatDate(date, "Y-m-d");
+                                    const hour = date.getHours();
+                                    const minute = date.getMinutes();
+
+                                    // Check if the date has any disabled times
+                                    if (disabledTimes[dateStr]) {
+                                        return disabledTimes[dateStr].some(slot =>
+                                            slot.hours === hour && slot.minutes === minute
+                                        );
+                                    }
+                                    return false;
+                                }
+                            ]);
+                        }
+
+                    });
+
+                });
+
             var usernameField = document.getElementById('username');
             usernameField.blur();
             var errorDiv = document.getElementById('error_message');
