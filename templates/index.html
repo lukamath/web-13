@@ -2,16 +2,102 @@
 <html>
 <head>
     <title>Word 13</title>
-    <!-- Include flatpickr CSS and JavaScript -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> -->
-    <script src="{{ url_for('static', filename='js/flatpickr.js') }}"></script>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tempus Dominus CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tempus-dominus/6.2.7/css/tempus-dominus.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/dogebutton.min.css') }}">
+</head>
+<body>
+    <div class="message-box">
+        <h1><img src="{{ url_for('static', filename='img/w13_mainlogo.png') }}" alt="word 13"></h1>
+        <form method="POST" onsubmit="return validateInput();">
+            <br>
+            <div class="user-box">
+                <label>Message</label>  
+                <textarea id="input_text" name="input_text" rows="5" cols="40" oninput="updateInput();"></textarea>    
+                <label>Signature</label>
+                <input type="text" id="username" name="username">    
+            </div>
+            <div class="form-group">
+                <label for="date_time">Date and Time:</label>
+                <input type="text" id="date_time" name="date_time" class="form-control" required>
+            </div>
+            <input type="submit" class="send-button" id="send-button" value="Send">
+            <div class="counter-box">
+                <p>Character Count: <span id="char_count">0</span></p>
+                <p>Word Count: <span id="word_count">0</span></p>
+            </div>       
+        </form>
+    </div>
+    <div class="bottom-box">
+        <div data-xdgbtn-address="D6U7eTceRUace37ySXfAMgHtehMMNmiC7t" class="xdgbtn-donate xdgbtn-theme-corpo xdgbtn-black"></div>
+        <script type="text/javascript" src="static/js/dogebutton.min.js"></script>
+    </div>
 
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/dogebutton.min.css') }}">
-
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <!-- Tempus Dominus JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempus-dominus/6.2.7/js/tempus-dominus.min.js"></script>
+    <!-- Font Awesome for the calendar icon -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the datetime picker
+            const datepickerElement = document.getElementById('date_time');
+            const datetimepicker = new tempusDominus.TempusDominus(datepickerElement, {
+                useCurrent: false,
+                stepping: 10, // 10-minute intervals
+                display: {
+                    components: {
+                        calendar: true,
+                        date: true,
+                        month: true,
+                        year: true,
+                        decades: true,
+                        clock: true,
+                        hours: true,
+                        minutes: true,
+                        seconds: false
+                    }
+                }
+            });
+
+            // Fetch occupied slots and apply them
+            function updatePickerWithOccupiedSlots() {
+                fetch('/api/occupied_slots')
+                    .then(response => response.json())
+                    .then(occupiedSlots => {
+                        // Convert occupied slots to an array of {date, time} objects
+                        const disabledTimes = occupiedSlots.map(slot => new Date(slot));
+
+                        // Disable specific times on selected dates
+                        datetimepicker.updateOptions({
+                            restrictions: {
+                                disabledDates: function (date) {
+                                    return disabledTimes.some(disabled => (
+                                        date.getFullYear() === disabled.getFullYear() &&
+                                        date.getMonth() === disabled.getMonth() &&
+                                        date.getDate() === disabled.getDate() &&
+                                        date.getHours() === disabled.getHours() &&
+                                        date.getMinutes() === disabled.getMinutes()
+                                    ));
+                                }
+                            }
+                        });
+                    });
+            }
+
+            // Initial update
+            updatePickerWithOccupiedSlots();
+
+            // Re-fetch and update the picker whenever a new date is selected
+            datepickerElement.addEventListener('change', updatePickerWithOccupiedSlots);
+        });
+
         function validateInput() {
             var textArea = document.getElementById('input_text');
             var usernameField = document.getElementById('username');
@@ -74,128 +160,6 @@
             var charCountSpan = document.getElementById('char_count');
             charCountSpan.innerHTML = charCount;
         }
-
-        document.addEventListener('DOMContentLoaded', function () {
-
-            // Fetch occupied slots from the server
-            fetch('/api/occupied_slots')
-                .then(response => response.json())
-                .then(occupiedSlots => {
-
-
-                     // Convert occupied slots to a format suitable for disabling
-                    const disabledTimes = occupiedSlots.reduce((acc, slot) => {
-                        const [date, time] = slot.split(' ');
-                        const [hours, minutes] = time.split(':');
-                        if (!acc[date]) acc[date] = [];
-                        acc[date].push({ hours: parseInt(hours, 10), minutes: parseInt(minutes, 10) });
-                        return acc;
-                    }, {});
-
-
-                    flatpickr("#date_time", {  // Update the ID to match the input field
-                        enableTime: true,
-                        dateFormat: "Y-m-d H:i",
-                        minuteIncrement: 10,
-                        minDate: "today",
-                        defaultDate: "today",
-
-                        // Initial disable function to handle disabled times
-                        enable: [
-                            function(date) {
-                                const dateStr = flatpickr.formatDate(date, "Y-m-d");
-                                // Allow selection of all dates initially
-                                return true;
-                            }
-                        ],
-                        // Function to disable specific time slots
-                        disable: [
-                            function(date) {
-                                const dateStr = flatpickr.formatDate(date, "Y-m-d");
-                                const hour = date.getHours();
-                                const minute = date.getMinutes();
-
-                                // Check if the date has any disabled times
-                                if (disabledTimes[dateStr]) {
-                                    return disabledTimes[dateStr].some(slot =>
-                                        slot.hours === hour && slot.minutes === minute
-                                    );
-                                }
-                                return false;
-                            }
-                        ],
-
-                        onChange: function(selectedDates, dateStr, instance) {
-                            // Update disable function when the date changes
-                            instance.set('disable', [
-                                function(date) {
-                                    const dateStr = flatpickr.formatDate(date, "Y-m-d");
-                                    const hour = date.getHours();
-                                    const minute = date.getMinutes();
-
-                                    // Check if the date has any disabled times
-                                    if (disabledTimes[dateStr]) {
-                                        return disabledTimes[dateStr].some(slot =>
-                                            slot.hours === hour && slot.minutes === minute
-                                        );
-                                    }
-                                    return false;
-                                }
-                            ]);
-                        }
-
-                    });
-
-                });
-
-            var usernameField = document.getElementById('username');
-            usernameField.blur();
-            var errorDiv = document.getElementById('error_message');
-            errorDiv.style.display = 'none'; // Hide the error message initially
-        });
-
-        function sendButtonClick() {
-        var sendButton = document.getElementById('send-button');
-        sendButton.click();
-        return false; // Prevent the default action of the <a> tag
-    }
-
     </script>
-</head>
-<body>
-    <div class="message-box">
-        <h1><img src="{{ url_for('static', filename='img/w13_mainlogo.png') }}" alt="word 13"></h1>
-        <form method="POST" onsubmit="return validateInput();">
-            <br>
-            <div class="user-box">
-                <label>Message</label>  
-                <textarea id="input_text" name="input_text" rows="5" cols="40" oninput="updateInput();"></textarea>    
-                <label>Signature</label>
-                <input type="text" id="username" name="username">    
-            </div>
-            <div class="form-group">
-                <label for="date_time">Date and Time:</label>
-                <input type="text" id="date_time" name="date_time" class="form-control" required>
-                <input type="submit" class="send-button" id="send-button" value="Send">
-            </div>
-            <div class="counter-box">
-                <p>Character Count: <span id="char_count">0</span></p>
-                <p>Word Count: <span id="word_count">0</span></p>
-            </div>       
-            <div class="btn-send">   
-                <a href="#" onclick="return sendButtonClick();">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    Send
-                </a>
-            <p id="error_message" class="error-message">{{ error_message }}</p>
-         </form>
-    </div>
-    <div class="bottom-box">
-            <div data-xdgbtn-address="D6U7eTceRUace37ySXfAMgHtehMMNmiC7t" class="xdgbtn-donate xdgbtn-theme-corpo xdgbtn-black"></div>
-            <script type="text/javascript" src="static/js/dogebutton.min.js"></script>
-    </div>
 </body>
 </html>
