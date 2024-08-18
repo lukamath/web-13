@@ -24,6 +24,14 @@
                 <label for="date_time">Date and Time:</label>
                 <input type="text" id="date_time" name="date_time" class="form-control" required>
             </div>
+            <div><datetime-slot-picker 
+                      placeholder="Pick a time slot" 
+                      time-slots-text="Time"
+                      no-slots-text="No slots are available" 
+                      time-format="HH:mm"
+                      dates-hidden-when-times-shown
+                      >
+                </datetime-slot-picker></div>
             <input type="submit" class="send-button" id="send-button" value="Send">
             <div class="counter-box">
                 <p>Character Count: <span id="char_count">0</span></p>
@@ -43,6 +51,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tempus-dominus/6.2.7/js/tempus-dominus.min.js"></script>
     <!-- Font Awesome for the calendar icon -->
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src='https://unpkg.com/datetime-slot-picker/dist/datetime-slot-picker/datetime-slot-picker.js'></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
