@@ -54,121 +54,32 @@
     <script src='https://unpkg.com/datetime-slot-picker/dist/datetime-slot-picker/datetime-slot-picker.js'></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize the datetime picker
-            const datepickerElement = document.getElementById('date_time');
-            const datetimepicker = new tempusDominus.TempusDominus(datepickerElement, {
-                useCurrent: false,
-                stepping: 10, // 10-minute intervals
-                display: {
-                    components: {
-                        calendar: true,
-                        date: true,
-                        month: true,
-                        year: true,
-                        decades: true,
-                        clock: true,
-                        hours: true,
-                        minutes: true,
-                        seconds: false
-                    }
-                }
-            });
+       const datetimeSlotPicker = document.querySelector('datetime-slot-picker');
 
-            // Fetch occupied slots and apply them
-            function updatePickerWithOccupiedSlots() {
-                fetch('/api/occupied_slots')
-                    .then(response => response.json())
-                    .then(occupiedSlots => {
-                        // Convert occupied slots to an array of {date, time} objects
-                        const disabledTimes = occupiedSlots.map(slot => new Date(slot));
 
-                        // Disable specific times on selected dates
-                        datetimepicker.updateOptions({
-                            restrictions: {
-                                disabledDates: function (date) {
-                                    return disabledTimes.some(disabled => (
-                                        date.getFullYear() === disabled.getFullYear() &&
-                                        date.getMonth() === disabled.getMonth() &&
-                                        date.getDate() === disabled.getDate() &&
-                                        date.getHours() === disabled.getHours() &&
-                                        date.getMinutes() === disabled.getMinutes()
-                                    ));
-                                }
-                            }
-                        });
-                    });
-            }
+// Event listener for when the slot picker is updated
+datetimeSlotPicker.addEventListener('slotUpdate', function(event) {
+    const selectedDate = 'Thu, 26 Nov 2020'; // Assuming event.detail has the selectedDate
+    console.log('Updated Slot:', event.detail);
 
-            // Initial update
-            updatePickerWithOccupiedSlots();
-
-            // Re-fetch and update the picker whenever a new date is selected
-            datepickerElement.addEventListener('change', updatePickerWithOccupiedSlots);
-        });
-
-        function validateInput() {
-            var textArea = document.getElementById('input_text');
-            var usernameField = document.getElementById('username');
-            var charCount = textArea.value.length;
-            var wordCount = textArea.value.trim().split(/\s+/).length;
-            var errorDiv = document.getElementById('error_message');
-
-            if (usernameField.value === "") {
-                errorDiv.style.display = 'block'; // Show the error message
-                errorDiv.innerHTML = "Please enter a username.";
-                return false;
-            } else if (wordCount > 10 || charCount > 109) {
-                errorDiv.style.display = 'block'; // Show the error message
-                errorDiv.innerHTML = "You've reached the limit of 10 words or 100 characters.";
-                return false;
-            } else {
-                errorDiv.innerHTML = "";
-            }
-            return true;
+    // Set the new slots based on the selected date and 1-hour interval
+    datetimeSlotPicker.slots = [
+        {
+            date: 'Thu, 26 Nov 2020',
+                //timeSlots: generateTimeSlots(10, 17) // Generate slots from 10:00 AM to 5:00 PM
+            timeSlots: [
+            '10:00 AM',
+            '11:00 AM',
+            '4:00 PM',
+            '5:00 PM'
+            ]
         }
+    ];
+});
 
-        function updateInput() {
-            var textArea = document.getElementById('input_text');
-            var charCount = textArea.value.length;
-            var wordCount = textArea.value.trim().split(/\s+/).length;
-            var errorDiv = document.getElementById('error_message');
 
-            var words = textArea.value.split(' ');
+</script>
 
-            for (var i = 0; i < words.length; i++) {
-                if (words[i].length > 10) {
-                    alert("Word truncated to 10 characters: " + words[i].slice(0, 10));
-                    words[i] = words[i].slice(0, 10);
-                }
-            }
 
-            if (charCount > 100) {
-                errorDiv.style.display = 'block'; // Show the error message
-                errorDiv.innerHTML = "You've reached the limit of 100 characters.";
-                textArea.value = textArea.value.slice(0, 100);
-            } else {
-                errorDiv.innerHTML = "";
-            }
-
-            textArea.value = words.join(' ');
-
-            var wordsArray = textArea.value.trim().split(/\s+/);
-            if (wordsArray.length > 10) {
-                wordsArray = wordsArray.slice(0, 10);
-                textArea.value = wordsArray.join(' ');
-                errorDiv.style.display = 'block'; // Show the error message
-                errorDiv.innerHTML = "You've reached the limit of 10 words.";
-            } else {
-                errorDiv.innerHTML = "";
-            }
-
-            var wordCountSpan = document.getElementById('word_count');
-            wordCountSpan.innerHTML = wordsArray.length;
-
-            var charCountSpan = document.getElementById('char_count');
-            charCountSpan.innerHTML = charCount;
-        }
-    </script>
 </body>
 </html>
